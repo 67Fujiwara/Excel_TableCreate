@@ -56,6 +56,7 @@ class WindowController:
 class MainApp:
     def __init__(self, root):
         # self.get_path()
+        self.input_flag = False
         self.input_data() 
         self.root = root  
         self.bg_white = "white"
@@ -68,8 +69,9 @@ class MainApp:
        
         # self.get_data()
      
-        self.check_table()
-        self.create_table()
+        if self.input_flag == True:
+            self.check_table()
+            self.create_table()
         
         
     def get_path(self):
@@ -122,7 +124,7 @@ class MainApp:
         self.number_cell = self.sub1_control.create_entry(5, 1, 2 )
         self.number_column = self.sub1_control.create_label("center", "列数", 2, 0, 10)
         self.number_row = self.sub1_control.create_label("center", "行数", 3, 0, 10)
-        self.sub1_control.create_button("書き込み", lambda:self.get_data(), self.bg_white, self.font_black, 100, 100, 50, 30)
+        self.sub1_control.create_button("書き込み", lambda:self.on_button_click(), self.bg_white, self.font_black, 100, 100, 50, 30)
    
    
     def create_sub2(self):
@@ -130,11 +132,14 @@ class MainApp:
         self.sub2_control = WindowController(sub_win2, "value_table", self.bg_white, "300x200")
     
     
-    def get_data(self):
+    def on_button_click(self):
        self.getAlphabet_cell = self.alphabet_cell.get()
        self.getNumber_cell = int(self.number_cell.get())
        self.getNumber_column = int(self.number_column.get())
        self.getNumber_row = int(self.number_row.get())
+       self.input_flag = True     #ﾎﾞﾀﾝonのﾌﾗｸﾞ
+       print("button_on")
+       
    
        
     def create_table(self):
