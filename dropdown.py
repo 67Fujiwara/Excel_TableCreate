@@ -86,23 +86,7 @@ class WindowController:
         self.ws_result = self.combobox.get()
 
 
-    def create_dropdown(self):
-        dv = DataValidation(
-            type = "list",
-            formula1 = '"〇,×"',
-            allow_blank = True,
-            showErrorMessage = True,
-            errorStyle = "warning",
-            errorTitle = "error",
-            error = "続けますか？"
-        )
-        self.ws.add_data_validation(dv)
-
-        # 現在のセル位置の文字列座標を取得
-        cell_coord = self.ws.cell(row=self.row, column=self.column_number + self.index).coordinate
-        dv.add(cell_coord)
-        self.ws.add_data_validation(dv)
-
+    
 
 
 class MainApp:
@@ -178,7 +162,27 @@ class MainApp:
         self.getNumber_row = int(self.number_row.get())
         self.input_check_table()
        
+    
+    def create_dropdown(self):
+        dv = DataValidation(
+            type = "list",
+            formula1 = '"〇"',
+            allow_blank = True,
+            showErrorMessage = True,
+            errorStyle = "warning",
+            errorTitle = "error",
+            error = "続けますか？"
+        )
+        self.ws.add_data_validation(dv)
 
+        # 現在のセル位置の文字列座標を取得
+        cell_coord_start = self.ws.cell(row=self.ref_row + 2, column=self.column_number + 1).coordinate
+        cell_coord_end = self.ws.cell(row=self.ref_row + self.input_rows + 1, column=self.column_number + self.input_columns).coordinate
+        print(cell_coord_start,':',cell_coord_end)
+        dv.add(f'{cell_coord_start}:{cell_coord_end}')
+        self.ws.add_data_validation(dv)
+
+    
     def create_table(self):
         line = openpyxl.styles.Side(style="thin", color="000000")     #普通線・黒色
         border = openpyxl.styles.Border(top=line, bottom=line, left=line, right=line)      #上下左右を線に適応
@@ -213,15 +217,10 @@ class MainApp:
                     cell.fill = employee_color           
                         
                 else:
-                    # char_to_column = chr(63 + self.column_number + index)
-                    # dv = DataValidation(type="list", formula1='"〇,△,×"', showDropDown=True)
-                    # self.ws.add_data_validation(dv)
-                    # dv.add(self.ws[row,self.column_number + index])
-                    # print(row,self.column_number + index)
-                    self.sub1_control.create_dropdown()
-                    
+         
                     pass
-    
+                
+        self.create_dropdown()     
         self.wb.save(file_path)
         self.save_comp = self.sub1_control.create_label3("center", "Excel書き込み完了", 25, 150, 200, 30)
 
@@ -243,7 +242,7 @@ class MainApp:
 
 
 
-file_path = Path(r"C:\Users\yuta_\OneDrive\デスクトップ\aaa.xlsx")
+file_path = Path(r"C:\Users\yuta_\OneDrive\デスクトップ\abc.xlsx")
 # if len(sys.argv) > 1:
 #     file_path = sys.argv[1]
 #     pyperclip.copy(file_path)
